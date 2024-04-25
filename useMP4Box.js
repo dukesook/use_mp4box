@@ -1,18 +1,19 @@
 console.log('MP4Box: ', MP4Box);
 
 const fileInput = document.getElementById('input');
-fileInput.onchange = () => {
-  const selectedFile = fileInput.files[0];
+fileInput.onchange = async () => {
+  const selectedFile = fileInput.files[0]; // Blob Object
 
-  selectedFile.arrayBuffer().then((buf) => {
+  // Convert Blob to ArrayBuffer
+  selectedFile.arrayBuffer().then((arrayBuffer) => {
     const mp4boxfile = MP4Box.createFile();
 
-    mp4boxfile.onReady = function (info) {
-      // console.log('Received File Information', info);
-    };
+    // mp4boxfile.onReady = function (info) {
+    //   console.log('Received File Information', info);
+    // };
 
-    buf.fileStart = 0; // MP4Box needs each buffer to have a custom `fileStart` property, supposedly telling which slice of the file this ArrayBuffer refers to.
-    mp4boxfile.appendBuffer(buf);
+    arrayBuffer.fileStart = 0; // MP4Box needs each buffer to have a custom `fileStart` property, supposedly telling which slice of the file this ArrayBuffer refers to.
+    mp4boxfile.appendBuffer(arrayBuffer);
     mp4boxfile.flush();
 
     console.log(mp4boxfile);
